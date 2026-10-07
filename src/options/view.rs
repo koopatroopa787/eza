@@ -215,11 +215,9 @@ impl TerminalWidth {
             }
         } else if let Some(columns) = vars.get(vars::COLUMNS).and_then(|s| s.into_string().ok()) {
             match columns.parse::<usize>() {
-                Ok(width) if width > MAX_TERMINAL_WIDTH => {
-                    Err(OptionsError::Unsupported(format!(
-                        "COLUMNS value {width} exceeds the maximum of {MAX_TERMINAL_WIDTH}"
-                    )))
-                }
+                Ok(width) if width > MAX_TERMINAL_WIDTH => Err(OptionsError::Unsupported(format!(
+                    "COLUMNS value {width} exceeds the maximum of {MAX_TERMINAL_WIDTH}"
+                ))),
                 Ok(width) => Ok(Set(width)),
                 Err(e) => {
                     let source = NumberSource::Env(vars::COLUMNS);
